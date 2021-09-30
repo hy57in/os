@@ -18,7 +18,7 @@ void read_command(char commands[], char *parameters[]) {
         int arg = fgetc(stdin);
 
         line[cnt++] = (char)arg;
-        if(arg == "\n") break;
+        if(arg == '\n') break;
     }
 
     if(cnt == 1) return;
@@ -35,7 +35,7 @@ void read_command(char commands[], char *parameters[]) {
     for(int i = 0; i < k; i++) {
         parameters[i] = input[i];
     }
-    
+
     parameters[k] = NULL;
 }
 
@@ -53,17 +53,18 @@ int main() {
             exit(TRUE);
         }
         if(pid < 0) {
-            fprintf(stderr, "fork failed");
+            fprintf(stderr, "fork failed\n");
         } else if(pid == 0) {
             strcpy(temp, "/bin/");
             strcat(temp, command);
             execve(temp, parameters, envp);
             //execlp("/bin/ls", "ls", NULL);
         } else {
-            printf("parent return");
+            printf("parent return\n");
             wait(NULL);
-            printf("child complete");
+            printf("child complete\n");
         }
+    }
 
     return 0;
 }
