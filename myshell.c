@@ -5,61 +5,65 @@
 #include <unistd.h>
 
 #define TRUE 1
-#define MAXa 1024
-#define MAXb 100
 
 void type_propmt() {
     printf("KimHyoJin$");
 }
 
-void read_command(char cmd[], char *par[]) {
-    char line[MAXa];
-    int count = 0, i = 0, j = 0;
-    char *arr[MAXb], *piece;
+void read_command(char commands[], char *parameters[]) {
+    char line[1024], *input[100], *args;
+    int cnt = 0, k = 0;
 
     while(TRUE) {
-        int c = fgetc(stdin);
-        line[count++] = (char)c;
-        if(c == "\n") break;
+        int arg = fgetc(stdin);
 
+        line[cnt++] = (char)arg;
+        if(arg == "\n") break;
     }
-    if(count == 1) return;
-    piece = strtok(line, "\n\t");
-    while(piece != NULL) {
-        arr[i++] = strdup(piece);
-        piece = strtok(NULL, "\n\t");
-    }
-    strcpy(cmd, arr[0]);
-    for(j = 0; j < i; j++) {
-        par[j] = arr[j];
-    }
-    par[i] = NULL;
 
+    if(cnt == 1) return;
+
+    args = strtok(line, "\n\t");
+
+    while(args != NULL) {
+        input[k++] = strdup(args);
+        args = strtok(NULL, "\n\t");
+    }
+
+    strcpy(commands, input[0]);
+
+    for(int i = 0; i < k; i++) {
+        parameters[i] = input[i];
+    }
+    
+    parameters[k] = NULL;
 }
 
 int main() {
-    char temp[MAXb], command[MAXb], *parameters[MAXb];
-    char *envp[] = {(char *) "PATH = /bin", 0};
+    char temp[100], command[100], *parameters[100];
+    char *envp[] = {(char *) "PATH=/bin", 0};
+    pid_t pid;
+    pid = fork();
 
     while(TRUE) {
         type_propmt();
         read_command(command, parameters);
 
-        if(strcmp(command, "exit") == 0) {
+        if(strcmp(command, "exit") == 0) { //exit
             exit(TRUE);
-        } else {
-            if(fork() != 0) {
-                printf("Parents retrn\n");
-                wait(NULL);
-                printf("Parents return\n");
-            } else {
-                strcpy(temp, "/bin/");
-                strcat(temp, command);
-                execve(temp, parameters, envp);
-            } 
         }
-        
-    }
+        if(pid < 0) {
+            fprintf(stderr, "fork failed");
+        } else if(pid == 0) {
+            strcpy(temp, "/bin/");
+            strcat(temp, command);
+            execve(temp, parameters, envp);
+            //execlp("/bin/ls", "ls", NULL);
+        } else {
+            printf("parent return");
+            wait(NULL);
+            printf("child complete");
+        }
 
     return 0;
 }
