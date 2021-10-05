@@ -8,7 +8,7 @@ void *producer(void *arg);
 void *consumer(void *arg);
 
 int gNumber = 0;
-int run_now = 0;
+int run_now = 1;
 
 int main() {
     int producer_result, consumer_result;
@@ -39,12 +39,12 @@ void *producer(void *arg) {
     int sum_p = 0;
 
     while(print_count_p++ < 100) {
-        if(run_now == 2) {
+        if(run_now == 1) {
             int randomNumber = rand() % 100; // generate 0~99 number
             gNumber = randomNumber;
             printf("randomNumber : %d", randomNumber);
             sum_p += randomNumber;
-            run_now = 1;
+            run_now = 2;
         } else {
             sleep(1);
         }
@@ -57,9 +57,9 @@ void *consumer(void *arg) {
     int sum_c = 0;
 
     while(print_count_c++ < 100) {
-        if(run_now == 1) {
+        if(run_now == 2) {
             printf("sgNumber : %d", gNumber);
-            run_now = 2;
+            run_now = 1;
             sum_c += gNumber;
         } else {
             sleep(1);
