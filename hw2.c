@@ -42,7 +42,7 @@ void *producer(void *arg) {
         if(run_now == 1) {
             int randomNumber = rand() % 100; // generate 0~99 number
             gNumber = randomNumber;
-            printf("randomNumber : %d", randomNumber);
+            printf("randomNumber : %d\n", randomNumber);
             sum_p += randomNumber;
             run_now = 2;
         } else {
@@ -58,7 +58,7 @@ void *consumer(void *arg) {
 
     while(print_count_c++ < 100) {
         if(run_now == 2) {
-            printf("sgNumber : %d", gNumber);
+            printf("sgNumber : %d\n", gNumber);
             run_now = 1;
             sum_c += gNumber;
         } else {
