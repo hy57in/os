@@ -43,9 +43,9 @@ int main() {
     char temp[100], command[100], *parameters[100];
     char *envp[] = {(char *) "PATH=/bin", 0};
     pid_t pid;
-    pid = fork();
 
     while(TRUE) {
+        pid = fork();
         type_propmt();
         read_command(command, parameters);
 
@@ -60,7 +60,7 @@ int main() {
             execve(temp, parameters, envp);
             //execlp("/bin/ls", "ls", NULL);
         } else {
-            printf("parent return\n");
+            printf("parent wait\n");
             wait(NULL);
             printf("child complete\n");
         }
