@@ -25,6 +25,9 @@ int main() {
     consumer_result = pthread_join(consumer_thread, &consumer_thread_result);
     printf("consumer thread join\n");
 
+    printf("producer_thread_result : %d\n", producer_thread_result);
+    printf("consumer_thread_result : %d\n", consumer_thread_result);
+
     if(producer_thread_result == consumer_thread_result) {
         printf("SUCCESS");
     } else {
@@ -58,7 +61,7 @@ void *consumer(void *arg) {
 
     while(print_count_c++ < 100) {
         if(run_now == 2) {
-            printf("sgNumber : %d\n", gNumber);
+            printf("gNumber : %d\n", gNumber);
             run_now = 1;
             sum_c += gNumber;
         } else {
